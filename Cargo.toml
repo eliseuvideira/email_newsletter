@@ -12,8 +12,23 @@ name = "email_newsletter"
 
 [dependencies]
 actix-web = "4"
+chrono = { version = "0.4.41", default-features = false, features = ["clock"] }
+config = "0.15.11"
 serde = { version = "1.0.219", features = ["derive"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+uuid = { version = "1.16.0", features = ["v4"] }
+
+[dependencies.sqlx]
+version = "0.8"
+default-features = false
+features = [
+  "runtime-tokio-rustls",
+  "postgres",
+  "uuid",
+  "chrono",
+  "migrate",
+  "macros",
+]
 
 [dev-dependencies]
 reqwest = "0.12.15"
