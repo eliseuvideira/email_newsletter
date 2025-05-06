@@ -14,8 +14,14 @@ name = "email_newsletter"
 actix-web = "4"
 chrono = { version = "0.4.41", default-features = false, features = ["clock"] }
 config = "0.15.11"
+secrecy = { version = "0.10.3", features = ["serde"] }
 serde = { version = "1.0.219", features = ["derive"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1.41"
+tracing-actix-web = "0.7.18"
+tracing-bunyan-formatter = "0.3.10"
+tracing-log = "0.2.0"
+tracing-subscriber = { version = "0.3.19", features = ["registry", "env-filter"] }
 uuid = { version = "1.16.0", features = ["v4"] }
 
 [dependencies.sqlx]
@@ -31,4 +37,5 @@ features = [
 ]
 
 [dev-dependencies]
+once_cell = "1.21.3"
 reqwest = "0.12.15"
