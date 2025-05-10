@@ -1,5 +1,5 @@
 use reqwest::Client;
-use secrecy::{ExposeSecret, SecretBox};
+use secrecy::{ExposeSecret, SecretString};
 use serde::Serialize;
 
 pub use crate::domain::SubscriberEmail;
@@ -8,14 +8,14 @@ pub struct EmailClient {
     sender: SubscriberEmail,
     http_client: Client,
     base_url: String,
-    authorization_token: SecretBox<String>,
+    authorization_token: SecretString,
 }
 
 impl EmailClient {
     pub fn new(
         base_url: String,
         sender: SubscriberEmail,
-        authorization_token: SecretBox<String>,
+        authorization_token: SecretString,
         timeout: std::time::Duration,
     ) -> Self {
         let http_client = Client::builder().timeout(timeout).build().unwrap();
@@ -73,12 +73,13 @@ mod tests {
     use claims::{assert_err, assert_ok};
     use fake::{
         faker::{
+            internet::en::Password,
             internet::en::SafeEmail,
             lorem::en::{Paragraph, Sentence},
         },
-        Fake, Faker,
+        Fake,
     };
-    use secrecy::SecretBox;
+    use secrecy::SecretString;
     use wiremock::{
         matchers::{any, header, header_exists, method, path},
         Mock, MockServer, ResponseTemplate,
@@ -102,7 +103,7 @@ mod tests {
         EmailClient::new(
             base_url,
             email(),
-            SecretBox::new(Faker.fake()),
+            SecretString::new(Password(32..64).fake::<String>().into_boxed_str()),
             std::time::Duration::from_millis(200),
         )
     }
