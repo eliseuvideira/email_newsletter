@@ -28,6 +28,7 @@ impl EmailClient {
         }
     }
 
+    #[tracing::instrument(name = "Send email", skip(self))]
     pub async fn send_email(
         &self,
         recipient: SubscriberEmail,
@@ -43,8 +44,7 @@ impl EmailClient {
             html_body: html_content,
             text_body: text_content,
         };
-        let _ = self
-            .http_client
+        self.http_client
             .post(&url)
             .header(
                 "X-Postmark-Server-Token",
